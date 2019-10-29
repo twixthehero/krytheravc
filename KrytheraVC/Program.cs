@@ -1,5 +1,6 @@
 ﻿using DSharpPlus;
 using DSharpPlus.CommandsNext;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace KrytheraVC
     class Program
     {
         private const string DISCORD_TOKEN_FILE = "discord-token.txt";
+        private const string DEFAULT_INVALID_TOKEN = "<YOUR TOKEN HERE>";
 
         private static DiscordClient discord;
         private static CommandsNextModule commands;
@@ -19,9 +21,17 @@ namespace KrytheraVC
 
         static async Task MainAsync(string[] args)
         {
+            string token = File.ReadAllText(DISCORD_TOKEN_FILE).Trim();
+
+            if (token == DEFAULT_INVALID_TOKEN)
+            {
+                Console.WriteLine("Please specify your discord app developer token in `discord-token.txt`!");
+                return;
+            }
+
             discord = new DiscordClient(new DiscordConfiguration()
             {
-                Token = File.ReadAllText(DISCORD_TOKEN_FILE),
+                Token = token,
                 TokenType = TokenType.Bot,
                 UseInternalLogHandler = true,
                 LogLevel = LogLevel.Debug
