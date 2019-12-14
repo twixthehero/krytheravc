@@ -21,11 +21,12 @@ namespace KrytheraVC
 
         static async Task MainAsync(string[] args)
         {
-            string token = File.ReadAllText(DISCORD_TOKEN_FILE).Trim();
+            string envToken = Environment.GetEnvironmentVariable("APP_TOKEN");
+            string token = envToken == null ? File.ReadAllText(DISCORD_TOKEN_FILE).Trim() : envToken;
 
             if (token == DEFAULT_INVALID_TOKEN)
             {
-                Console.WriteLine("Please specify your discord app developer token in `discord-token.txt`!");
+                Console.WriteLine("Please specify your discord app developer token in `discord-token.txt` or via the environment variable `APP_TOKEN`!");
                 return;
             }
 
